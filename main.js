@@ -1,16 +1,86 @@
 import data from './data.js'
 
-// Total profit for 2017
+// [x] Total profit for 2017
 
-const totalProfits = data.reduce((acc, cv) => acc + cv, 0);
+// Filtering to 2017 Purchase Year
+const purchasesIn2017 = data.filter(vehicle => {
+    let purchaseYear = vehicle.purchase_date.split("-")[0]
+    return purchaseYear === "2017"
+})
 
-// data.forEach(vehicle =>{
-//     vehicle.gross_profit
-// })
+// Mapping out a new array of just profits
+const profitsIn2017 = purchasesIn2017.map(purchase => {
+    return purchase.gross_profit
+})
+
+// Reducing that array
+const totalProfit = profitsIn2017.reduce((acc, cv) => acc + cv, 0);
+console.log("TOTAL PROFITS IN 2017: ", totalProfit);
 
 
-// In which month did they sell the most cars?
-// Which salesperson sold the most cars?
+// [x] In which month did they sell the most cars?
+
+// Setting up a global place to compare the highest
+let highest = {
+    month: '',
+    total: 0,
+    salesperson: '',
+    sales: 0
+}
+
+// Iterating over each month
+for (let i = 1; i <= 12; i++) {
+    // The month needs a leading zero before it becomes double digit
+    let currentMonth = `${i}`.padStart(2, '0')
+    // Filter purchases by month
+    const monthsPurchases = purchasesIn2017.filter(purchase =>{
+        let purchaseMonth = purchase.purchase_date.split("-")[1]
+        return purchaseMonth === currentMonth
+    })
+    // Reduce month's purchases
+    const monthsProfits = monthsPurchases.reduce((acc, cv) => acc + cv.gross_profit, 0)
+    // console.log("Purchase total for month ", i, " = ", monthsProfits);
+    if (monthsProfits > highest.total) {
+        highest.month = currentMonth
+        highest.total = monthsProfits
+    }
+}
+
+console.log("Highest Month: ", highest.month)
+console.log("Totaling: ", highest.total)
+
+// [ ] Which salesperson sold the most cars?
+
+// Don't quite get this, but found it here:
+// https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
+const onlyUnique = (value, index, self) => { 
+    return self.indexOf(value) === index;
+}
+
+// Unique List of Salespeople's Last Names
+const salespeople = purchasesIn2017.map(purchase => {
+    return purchase.sales_agent.last_name;
+}).filter(onlyUnique)
+
+// Debating how to proceed:
+salespeople.forEach(person => {
+        // Filter purchases by month
+        const personsSales = purchasesIn2017.filter(purchase =>{
+            return person === purchase.sales_agent.last_name
+        })
+        console.log(personsSales)
+        // Reduce month's purchases
+        // const  = monthsPurchases.reduce((acc, cv) => acc + cv.gross_profit, 0)
+        // // console.log("Purchase total for month ", i, " = ", monthsProfits);
+        // if (monthsProfits > highest.total) {
+        //     highest.month = currentMonth
+        //     highest.total = monthsProfits
+        // }
+})
+
+console.log(salespeople)
+
+
 // Which salesperson made the most profit?
 // Which model was the most popular?
 // Which bank provided the most loans to our customers?
