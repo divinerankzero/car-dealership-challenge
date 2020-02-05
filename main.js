@@ -41,6 +41,11 @@ for (let i = 1; i <= 12; i++) {
         let purchaseMonth = purchase.purchase_date.split("-")[1]
         return purchaseMonth === currentMonth
     })
+
+    if (monthsPurchases.length === 0) {
+        console.log("There were zero car sales in the month of", currentMonth)
+    }
+
     // Reduce month's purchases
     const monthsProfits = monthsPurchases.reduce((acc, cv) => acc + cv.gross_profit, 0)
     // console.log("Purchase total for month ", i, " = ", monthsProfits);
@@ -117,7 +122,7 @@ const creditProviders = purchasesIn2017.map(purchase => {
     return purchase.credit.credit_provider;
 }).filter(onlyUnique);
 
-console.log("List of Credit Providers:", creditProviders)
+// console.log("List of Credit Providers:", creditProviders)
 
 creditProviders.forEach(provider => {
     const providerSales = purchasesIn2017.filter(purchase =>{
@@ -134,4 +139,5 @@ creditProviders.forEach(provider => {
 
 console.log(highest.creditProvider, "provided the most loans with", highest.creditProviderTotal)
 
-// [ ] In which month did zero cars get sold?
+// [x] In which month did zero cars get sold?
+// SEE ABOVE
