@@ -27,7 +27,9 @@ let highest = {
     salesperson: '',
     salespersonTotal: 0,
     vehicleModel: '',
-    vehicleTotal: 0
+    vehicleTotal: 0,
+    creditProvider: '',
+    creditProviderTotal: 0
 }
 
 // Iterating over each month
@@ -91,7 +93,7 @@ console.log(highest.salesperson, "sold the most at", highest.salespersonTotal)
 // [x] Which model was the most popular?
 const models = purchasesIn2017.map(purchase => {
     return purchase.vehicle.model;
-}).filter(onlyUnique)
+}).filter(onlyUnique);
 
 // console.log("List of models:", models)
 
@@ -110,7 +112,26 @@ models.forEach(model => {
 })
 console.log(highest.vehicleModel, "sold the most at", highest.vehicleTotal, "units")
 
-// [ ] Which bank provided the most loans to our customers?
+// [x] Which bank provided the most loans to our customers?
+const creditProviders = purchasesIn2017.map(purchase => {
+    return purchase.credit.credit_provider;
+}).filter(onlyUnique);
 
+console.log("List of Credit Providers:", creditProviders)
+
+creditProviders.forEach(provider => {
+    const providerSales = purchasesIn2017.filter(purchase =>{
+        return provider === purchase.credit.credit_provider;
+    });
+
+    // console.log(provider, "gave", providerSales.length, "loans")
+
+    if (providerSales.length > highest.creditProviderTotal) {
+        highest.creditProvider = provider
+        highest.creditProviderTotal = providerSales.length
+    }
+})
+
+console.log(highest.creditProvider, "provided the most loans with", highest.creditProviderTotal)
 
 // [ ] In which month did zero cars get sold?
