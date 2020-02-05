@@ -25,7 +25,9 @@ let highest = {
     monthNum: '',
     monthTotal: 0,
     salesperson: '',
-    salespersonTotal: 0
+    salespersonTotal: 0,
+    vehicleModel: '',
+    vehicleTotal: 0
 }
 
 // Iterating over each month
@@ -66,6 +68,8 @@ const salespeople = purchasesIn2017.map(purchase => {
 
 // console.log("List of salespeople: ", salespeople)
 
+// Filtering the sales for each salesperson
+// Reducing their profits to get a grand total
 salespeople.forEach(person => {
     const personsSales = purchasesIn2017.filter(purchase =>{
         return person === purchase.sales_agent.last_name
@@ -74,7 +78,7 @@ salespeople.forEach(person => {
 
     const personProfits = personsSales.reduce((acc, cv) => acc + cv.gross_profit, 0)
     
-    console.log(person, "sold ", personsSales.length, " cars with a gross profit of $", personProfits)
+    // console.log(person, "sold ", personsSales.length, " cars with a gross profit of $", personProfits)
 
     if (personProfits > highest.salespersonTotal) {
         highest.salesperson = person
@@ -84,6 +88,29 @@ salespeople.forEach(person => {
 
 console.log(highest.salesperson, "sold the most at", highest.salespersonTotal)
 
-// [ ] Which model was the most popular?
+// [x] Which model was the most popular?
+const models = purchasesIn2017.map(purchase => {
+    return purchase.vehicle.model;
+}).filter(onlyUnique)
+
+// console.log("List of models:", models)
+
+models.forEach(model => {
+    const modelSales = purchasesIn2017.filter(purchase =>{
+        return model === purchase.vehicle.model;
+    });
+
+    // console.log(model, "sold", modelSales.length, "units");
+
+    if (modelSales.length > highest.vehicleTotal) {
+        highest.vehicleModel = model
+        highest.vehicleTotal = modelSales.length
+    }
+
+})
+console.log(highest.vehicleModel, "sold the most at", highest.vehicleTotal, "units")
+
 // [ ] Which bank provided the most loans to our customers?
+
+
 // [ ] In which month did zero cars get sold?
