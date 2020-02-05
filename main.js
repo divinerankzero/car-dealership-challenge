@@ -1,6 +1,27 @@
 import data from './data.js'
 
+// Setting up a global place to compare the highest
+let highest = {
+    month: {
+        num: '',
+        profits: 0,
+    },
+    salesperson: {
+        lastName: '',
+        grossProfits: 0,
+    },
+    vehicle: {
+        model: '',
+        totalSales: 0,
+    },
+    creditProvider: {
+        name: '',
+        totalLoans: 0
+    }
+}
+// ------------------------------------------------------------------
 // [x] Total profit for 2017
+// ------------------------------------------------------------------
 
 // Filtering to 2017 Purchase Year
 const purchasesIn2017 = data.filter(vehicle => {
@@ -15,22 +36,12 @@ const profitsIn2017 = purchasesIn2017.map(purchase => {
 
 // Reducing that array
 const totalProfit = profitsIn2017.reduce((acc, cv) => acc + cv, 0);
-console.log("TOTAL PROFITS IN 2017: ", totalProfit);
+console.log("Total Profits in 2017: $", totalProfit);
 
 
+// ------------------------------------------------------------------
 // [x] In which month did they sell the most cars?
-
-// Setting up a global place to compare the highest
-let highest = {
-    monthNum: '',
-    monthTotal: 0,
-    salesperson: '',
-    salespersonTotal: 0,
-    vehicleModel: '',
-    vehicleTotal: 0,
-    creditProvider: '',
-    creditProviderTotal: 0
-}
+// ------------------------------------------------------------------
 
 // Iterating over each month
 for (let i = 1; i <= 12; i++) {
@@ -49,17 +60,18 @@ for (let i = 1; i <= 12; i++) {
     // Reduce month's purchases
     const monthsProfits = monthsPurchases.reduce((acc, cv) => acc + cv.gross_profit, 0)
     // console.log("Purchase total for month ", i, " = ", monthsProfits);
-    if (monthsProfits > highest.monthTotal) {
-        highest.monthNum = currentMonth
-        highest.monthTotal = monthsProfits
+    if (monthsProfits > highest.month.profits) {
+        highest.month.num = currentMonth
+        highest.month.profits = monthsProfits
     }
 }
 
-console.log("Highest Month: ", highest.monthNum)
-console.log("Totaling: ", highest.monthTotal)
+console.log(highest.month.num, "was the highest month at $", highest.month.profits)
 
+// ------------------------------------------------------------------
 // [x] Which salesperson sold the most cars?
 // [x] Which salesperson made the most profit?
+// ------------------------------------------------------------------
 
 // Don't quite get this, but found it here:
 // https://stackoverflow.com/questions/1960473/get-all-unique-values-in-a-javascript-array-remove-duplicates
@@ -87,15 +99,17 @@ salespeople.forEach(person => {
     
     // console.log(person, "sold ", personsSales.length, " cars with a gross profit of $", personProfits)
 
-    if (personProfits > highest.salespersonTotal) {
-        highest.salesperson = person
-        highest.salespersonTotal = personProfits
+    if (personProfits > highest.salesperson.grossProfits) {
+        highest.salesperson.lastName = person
+        highest.salesperson.grossProfits = personProfits
     }
 })
 
-console.log(highest.salesperson, "sold the most at", highest.salespersonTotal)
+console.log(highest.salesperson.lastName, "sold the most at", highest.salesperson.grossProfits)
 
+// ------------------------------------------------------------------
 // [x] Which model was the most popular?
+// ------------------------------------------------------------------
 const models = purchasesIn2017.map(purchase => {
     return purchase.vehicle.model;
 }).filter(onlyUnique);
@@ -109,15 +123,17 @@ models.forEach(model => {
 
     // console.log(model, "sold", modelSales.length, "units");
 
-    if (modelSales.length > highest.vehicleTotal) {
-        highest.vehicleModel = model
-        highest.vehicleTotal = modelSales.length
+    if (modelSales.length > highest.vehicle.totalSales) {
+        highest.vehicle.model = model
+        highest.vehicle.totalSales = modelSales.length
     }
 
 })
-console.log(highest.vehicleModel, "sold the most at", highest.vehicleTotal, "units")
+console.log(highest.vehicle.model, "sold the most at", highest.vehicle.totalSales, "units")
 
+// ------------------------------------------------------------------
 // [x] Which bank provided the most loans to our customers?
+// ------------------------------------------------------------------
 const creditProviders = purchasesIn2017.map(purchase => {
     return purchase.credit.credit_provider;
 }).filter(onlyUnique);
@@ -131,13 +147,15 @@ creditProviders.forEach(provider => {
 
     // console.log(provider, "gave", providerSales.length, "loans")
 
-    if (providerSales.length > highest.creditProviderTotal) {
-        highest.creditProvider = provider
-        highest.creditProviderTotal = providerSales.length
+    if (providerSales.length > highest.creditProvider.totalLoans) {
+        highest.creditProvider.name = provider
+        highest.creditProvider.totalLoans = providerSales.length
     }
 })
 
-console.log(highest.creditProvider, "provided the most loans with", highest.creditProviderTotal)
+console.log(highest.creditProvider.name, "provided the most loans with", highest.creditProvider.totalLoans)
 
+// ------------------------------------------------------------------
 // [x] In which month did zero cars get sold?
 // SEE ABOVE
+// ------------------------------------------------------------------
